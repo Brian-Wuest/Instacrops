@@ -27,7 +27,7 @@
 		{
 			this.Monitor.Log("Loading InstaCrops", LogLevel.Info);
 			this.modHelper = helper;
-			this.modHelper.Events.GameLoop.DayStarted += this.GameLoop_DayStarted;
+			this.modHelper.Events.GameLoop.Saving += this.GameLoop_DayStarted;
 			this.config = this.modHelper.ReadConfig<ModConfig>();
 			this.config.ValidateConfigOptions();
 			this.randomvalue = new Random();
@@ -38,7 +38,7 @@
 		/// </summary>
 		/// <param name="sender">The sender of the event.</param>
 		/// <param name="e">The event arguments.</param>
-		private void GameLoop_DayStarted(object sender, DayStartedEventArgs e)
+		private void GameLoop_DayStarted(object sender, SavingEventArgs e)
 		{
 			var currentChance = this.UpdateChanceForTodaysLuck();
 
