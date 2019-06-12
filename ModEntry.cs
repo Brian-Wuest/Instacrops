@@ -27,7 +27,7 @@
 		{
 			this.Monitor.Log("Loading InstaCrops", LogLevel.Info);
 			this.modHelper = helper;
-			this.modHelper.Events.GameLoop.Saving += this.GameLoop_DayStarted;
+			this.modHelper.Events.GameLoop.DayEnding += this.GameLoop_DayStarted;
 			this.config = this.modHelper.ReadConfig<ModConfig>();
 			this.config.ValidateConfigOptions();
 			this.randomvalue = new Random();
@@ -38,7 +38,7 @@
 		/// </summary>
 		/// <param name="sender">The sender of the event.</param>
 		/// <param name="e">The event arguments.</param>
-		private void GameLoop_DayStarted(object sender, SavingEventArgs e)
+		private void GameLoop_DayStarted(object sender, DayEndingEventArgs e)
 		{
 			var currentChance = this.UpdateChanceForTodaysLuck();
 
@@ -50,7 +50,8 @@
 					{
 						var dirt = pair.Value as HoeDirt;
 
-						if (dirt.crop != null)
+						// A state of 1 for dirt means it's watered.
+						if (dirt.crop != null && !dirt.crop.dead.Value && dirt.state == 1)
 						{
 							var randomChance = this.config.UseRandomChance ? this.randomvalue.Next(0, 100) : 100;
 
